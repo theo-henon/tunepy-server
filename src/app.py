@@ -25,3 +25,20 @@ def user_register():
     except DoesNotExist:
         User.create(username=username, password=bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()))
         return {"message": f"The user '{username}' has been successfully registered."}, 200
+
+
+@app.route("/users/login", methods=["POST"])
+def user_login():
+    # TODO: Return a JWT for user's authentication
+    username, password = None, None
+    try:
+        username, password = request.json["username"], request.json["password"]
+        user = User.get(User.username == username)
+        if bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
+            return {"message": f"User '{username}' successfully logged in."}, 200
+        else:
+            return {"error": "Invalid password."}, 400
+    except KeyError as key_error:
+        return {"error": "The username or the password is missing"}, 400
+    except DoesNotExist as doesnt_exist:
+        return {"error": f"The user '{username}' does not exist."}, 404
