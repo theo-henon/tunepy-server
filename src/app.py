@@ -3,6 +3,7 @@ from flask import Flask, request
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from peewee import DoesNotExist, IntegrityError
 
+import config
 from database.config import db
 from database.user import User
 
@@ -12,8 +13,8 @@ db.create_tables([User])
 
 # Initialize flask application
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_strong_secret_key'
-app.config["JWT_SECRET_KEY"] = 'your_jwt_secret_key'
+app.config['SECRET_KEY'] = config.API_SECRET_KEY
+app.config["JWT_SECRET_KEY"] = config.JWT_SECRET_KEY
 app.config['JWT_TOKEN_LOCATION'] = ['headers']
 jwt = JWTManager(app)
 
