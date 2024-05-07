@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
 import bcrypt
 from peewee import DoesNotExist
 
@@ -11,6 +12,10 @@ db.create_tables([User])
 
 # Initialize flask application
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your_strong_secret_key'
+app.config["JWT_SECRET_KEY"] = 'your_jwt_secret_key'
+app.config['JWT_TOKEN_LOCATION'] = ['headers']
+jwt = JWTManager(app)
 
 
 @app.route("/users/register", methods=["POST"])
@@ -29,13 +34,13 @@ def user_register():
 
 @app.route("/users/login", methods=["POST"])
 def user_login():
-    # TODO: Return a JWT for user's authentication
     username, password = None, None
     try:
         username, password = request.json["username"], request.json["password"]
         user = User.get(User.username == username)
         if bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
-            return {"message": f"User '{username}' successfully logged in."}, 200
+            access_token = create_access_token(identity=user.id)
+            return {"message": f"User '{username}' successfully logged in.", "access_token": access_token}, 200
         else:
             return {"error": "Invalid password."}, 400
     except KeyError as key_error:
