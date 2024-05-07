@@ -5,5 +5,5 @@ from database.base_model import BaseModel
 
 class User(BaseModel):
     id = AutoField()
-    username = CharField()
+    username = CharField(unique=True)
     password = CharField()
