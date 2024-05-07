@@ -49,11 +49,28 @@ def user_login():
         return {"error": f"The user '{username}' does not exist."}, 404
 
 
-@app.route("/users/profile/<username>", methods=["GET"])
+@app.route("/users/profile/<username>", methods=["GET", "PUT"])
 @jwt_required()
 def user_profile(username):
-    try:
-        user = User.get(User.username == username)
+    if request.method == "GET":
+        try:
+            user = User.get(User.username == username)
+            return {"id": user.id, "username": user.username}
+        except DoesNotExist as doesnt_exist:
+            return {"error": f"User '{username}' not found."}, 404
+    else:
+        user_id = get_jwt_identity()
+        user = None
+        try:
+            user = User.get(User.username == username)
+            if user.id == user_id:
+                new_username = request.json["username"]
+                user.username = new_username
+                user.save()
+            else:
+                return {"error": f"You're not authorized to update {username}'s profile."}, 401
+        except DoesNotExist as doesnt_exist:
+            return {"error": f"User '{username}' not found."}, 404
+        except KeyError as key_error:
+            pass
         return {"id": user.id, "username": user.username}
-    except DoesNotExist as doesnt_exist:
-        return {"error": f"User '{username}' not found."}, 404
