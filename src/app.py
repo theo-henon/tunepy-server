@@ -47,3 +47,13 @@ def user_login():
         return {"error": "The username or the password is missing"}, 400
     except DoesNotExist as doesnt_exist:
         return {"error": f"The user '{username}' does not exist."}, 404
+
+
+@app.route("/users/profile/<username>", methods=["GET"])
+@jwt_required()
+def user_profile(username):
+    try:
+        user = User.get(User.username == username)
+        return {"id": user.id, "username": user.username}
+    except DoesNotExist as doesnt_exist:
+        return {"error": f"User '{username}' not found."}, 404
