@@ -83,4 +83,4 @@ def user_profile(username):
 
 
 if __name__ == "__main__":
-    app.run(host=Config.API_HOST, port=Config.API_PORT, debug=Config.DEBUG_MODE)
+    app.run(host=Config.API_HOST, port=Config.API_PORT, debug=Config.DEBUG)
