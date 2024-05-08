@@ -7,6 +7,7 @@ class Config:
     DEBUG: bool = True
     API_SECRET_KEY: str = "your_strong_secret_key"
     JWT_SECRET_KEY: str = "your_jwt_secret_key"
+    DB_FILENAME: str = "tunepy_database"
 
     @staticmethod
     def parse():
@@ -18,6 +19,7 @@ class Config:
                 Config.DEBUG = config_doc["api"]["debug"]
                 Config.API_SECRET_KEY = config_doc["api"]["secret_key"]
                 Config.JWT_SECRET_KEY = config_doc["api"]["jwt_secret_key"]
+                Config.DB_FILENAME = config_doc["database"]["filename"]
         except FileNotFoundError:
             print("Configuration file 'tunepy_config.yml' not found!")
             Config.write()
@@ -35,6 +37,9 @@ class Config:
                         "debug": Config.DEBUG,
                         "secret_key": Config.API_SECRET_KEY,
                         "jwt_secret_key": Config.JWT_SECRET_KEY
+                    },
+                    "database": {
+                        "filename": Config.DB_FILENAME
                     }
                 }
                 print("Writing configuration file 'tunepy_config.yml'.")
