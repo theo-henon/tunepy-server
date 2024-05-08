@@ -20,5 +20,24 @@ class Config:
                 Config.JWT_SECRET_KEY = config_doc["api"]["jwt_secret_key"]
         except FileNotFoundError:
             print("Configuration file 'tunepy_config.yml' not found!")
+            Config.write()
         except TypeError:
-            print("Configuration file 'tunepy_config.yml' is invalid!")
+            print("Configuration file 'tunepy_config.yml' is invalid! Using default configuration.")
+
+    @staticmethod
+    def write():
+        try:
+            with open("tunepy_config.yml", "w") as config_file:
+                config_dict = {
+                    "api": {
+                        "host": Config.API_HOST,
+                        "port": Config.API_PORT,
+                        "debug": Config.DEBUG_MODE,
+                        "secret_key": Config.API_SECRET_KEY,
+                        "jwt_secret_key": Config.JWT_SECRET_KEY
+                    }
+                }
+                print("Writing configuration file 'tunepy_config.yml'.")
+                yaml.safe_dump(config_dict, stream=config_file)
+        except IOError as io_error:
+            print(io_error)
