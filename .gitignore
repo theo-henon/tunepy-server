@@ -3,3 +3,6 @@
 
 # Database files
 *.db
+
+# API configuration
+tunepy_config.yml
