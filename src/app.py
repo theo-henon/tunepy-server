@@ -97,9 +97,15 @@ def post_song():
         if os.path.exists(song_path) or Song.get_or_none(Song.filename == song_filename) is not None:
             return {"msg": "This file already exists in the server"}, 409
 
-        # TODO: Insert song in database
-        song_file.save(song_path)
-        return {"msg": "The song has been successfully uploaded!"}
+        try:
+            user_id = get_jwt_identity()
+            Song.create(uploader_id=user_id, filename=song_filename)
+            song_file.save(song_path)
+            return {"msg": "The song has been successfully uploaded!"}
+        except IntegrityError:
+            return {"msg": "This file already exists in the server"}, 409
+        except Exception as ex:
+            return {"msg": f"An internal server error occurred: {str(ex)}"}
     else:
         songs = []
         for song in Song.select():
