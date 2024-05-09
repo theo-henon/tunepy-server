@@ -87,16 +87,29 @@ def user_profile(username):
         return {"id": user.id, "username": user.username}
 
 
-@app.route("/songs", methods=["POST"])
+@app.route("/songs", methods=["GET", "POST"])
 @jwt_required()
 def post_song():
-    song_file = request.files["audio"]
-    song_filename = secure_filename(song_file.filename)
-    song_path = os.path.join(Config.SONGS_DIRECTORY, song_filename)
-    if os.path.exists(song_path) or Song.get_or_none(Song.filename == song_filename) is not None:
-        return {"msg": "This file already exists in the server"}, 409
-    song_file.save(song_path)
-    return {"msg": "The song has been successfully uploaded!"}
+    if request.method == "POST":
+        song_file = request.files["audio"]
+        song_filename = secure_filename(song_file.filename)
+        song_path = os.path.join(Config.SONGS_DIRECTORY, song_filename)
+        if os.path.exists(song_path) or Song.get_or_none(Song.filename == song_filename) is not None:
+            return {"msg": "This file already exists in the server"}, 409
+
+        # TODO: Insert song in database
+        song_file.save(song_path)
+        return {"msg": "The song has been successfully uploaded!"}
+    else:
+        songs = []
+        for song in Song.select():
+            songs.append({
+                "id": song.id,
+                "uploader_id": song.uploader.id,
+                "upload_date": song.upload_date,
+                "filename": song.filename
+            })
+        return {"songs": songs}
 
 
 if __name__ == "__main__":
