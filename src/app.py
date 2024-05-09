@@ -28,6 +28,7 @@ def user_register():
     try:
         username, password = request.json["username"], request.json["password"]
         User.create(username=username, password=bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()))
+        return {"msg": f"The user '{username}' has been successfully registered!"}
     except KeyError:
         return {"msg": "Missing credentials."}, 400
     except DoesNotExist:
