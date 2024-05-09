@@ -7,7 +7,7 @@ class Config:
     DEBUG: bool = True
     API_SECRET_KEY: str = "your_strong_secret_key"
     JWT_SECRET_KEY: str = "your_jwt_secret_key"
-    DB_FILENAME: str = "tunepy_database"
+    DB_FILENAME: str = "tunepy_database.db"
 
     @staticmethod
     def parse():
