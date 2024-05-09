@@ -10,6 +10,9 @@ bcrypt = "*"
 flask-jwt-extended = "*"
 pyyaml = "*"
 pytest = "*"
+librosa = "*"
+mutagen = "*"
+pydub = "*"
 
 [dev-packages]
 
