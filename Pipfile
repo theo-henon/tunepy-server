@@ -10,7 +10,6 @@ bcrypt = "*"
 flask-jwt-extended = "*"
 pyyaml = "*"
 pytest = "*"
-requests = "*"
 
 [dev-packages]
 
