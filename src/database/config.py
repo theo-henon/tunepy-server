@@ -1,6 +1,5 @@
 from peewee import SqliteDatabase
 
-DB_FILENAME = "tunepy_database.db"
+from src.config import Config
 
-db = SqliteDatabase(DB_FILENAME)
-
+db = SqliteDatabase(Config.DB_FILENAME)
