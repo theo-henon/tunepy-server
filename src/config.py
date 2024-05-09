@@ -23,6 +23,7 @@ class Config:
                 Config.API_SECRET_KEY = config_doc["api"]["secret_key"]
                 Config.JWT_SECRET_KEY = config_doc["api"]["jwt_secret_key"]
                 Config.DB_FILENAME = config_doc["database"]["filename"]
+                Config.SONGS_DIRECTORY = config_doc["storage"]["songs_directory"]
         except FileNotFoundError:
             print("Configuration file 'tunepy_config.yml' not found!")
             Config.write()
@@ -51,6 +52,9 @@ class Config:
                     },
                     "database": {
                         "filename": Config.DB_FILENAME
+                    },
+                    "storage": {
+                        "songs_directory": Config.SONGS_DIRECTORY
                     }
                 }
                 print("Writing configuration file 'tunepy_config.yml'.")
