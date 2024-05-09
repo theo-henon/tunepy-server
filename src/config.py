@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 
@@ -8,6 +10,7 @@ class Config:
     API_SECRET_KEY: str = "your_strong_secret_key"
     JWT_SECRET_KEY: str = "your_jwt_secret_key"
     DB_FILENAME: str = "tunepy_database.db"
+    SONGS_DIRECTORY: str = "./songs/"
 
     @staticmethod
     def parse():
@@ -25,6 +28,14 @@ class Config:
             Config.write()
         except TypeError:
             print("Configuration file 'tunepy_config.yml' is invalid! Using default configuration.")
+
+        try:
+            os.mkdir(Config.SONGS_DIRECTORY)
+        except FileExistsError:
+            pass
+        except IOError as io_error:
+            print(io_error)
+            exit(1)
 
     @staticmethod
     def write():

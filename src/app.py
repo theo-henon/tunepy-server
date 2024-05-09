@@ -1,7 +1,10 @@
+import os
+
 import bcrypt
 from flask import Flask, request
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from peewee import DoesNotExist, IntegrityError
+from werkzeug.utils import secure_filename
 
 from config import Config
 from database.config import db
@@ -82,6 +85,18 @@ def user_profile(username):
         except KeyError as key_error:
             pass
         return {"id": user.id, "username": user.username}
+
+
+@app.route("/songs", methods=["POST"])
+@jwt_required()
+def post_song():
+    song_file = request.files["audio"]
+    song_filename = secure_filename(song_file.filename)
+    song_path = os.path.join(Config.SONGS_DIRECTORY, song_filename)
+    if os.path.exists(song_path) or Song.get_or_none(Song.filename == song_filename) is not None:
+        return {"msg": "This file already exists in the server"}, 409
+    song_file.save(song_path)
+    return {"msg": "The song has been successfully uploaded!"}
 
 
 if __name__ == "__main__":

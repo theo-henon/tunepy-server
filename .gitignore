@@ -6,3 +6,6 @@
 
 # API configuration
 tunepy_config.yml
+
+# Songs directory
+songs/
