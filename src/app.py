@@ -5,6 +5,7 @@ from peewee import DoesNotExist, IntegrityError
 
 from config import Config
 from database.config import db
+from database.song import Song
 from database.user import User
 
 # Parse configuration file
@@ -12,7 +13,7 @@ Config.parse()
 
 # Initialize database connection and tables
 db.connect()
-db.create_tables([User])
+db.create_tables([User, Song])
 
 # Initialize flask application
 app = Flask(__name__)

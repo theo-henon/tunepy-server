@@ -1,4 +1,4 @@
-from peewee import SqliteDatabase, Model
+from peewee import Model
 
 from database.config import db
 

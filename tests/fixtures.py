@@ -1,6 +1,7 @@
 import pytest
 
 from app import app, db
+from database.song import Song
 from database.user import User
 
 
@@ -8,8 +9,8 @@ from database.user import User
 def test_reset_app():
     app.config.update({"TESTING": True})
     yield app
-    db.drop_tables([User])
-    db.create_tables([User])
+    db.drop_tables([User, Song])
+    db.create_tables([User, Song])
 
 
 @pytest.fixture
