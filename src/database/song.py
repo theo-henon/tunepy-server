@@ -6,6 +6,6 @@ from database.user import User
 
 class Song(BaseModel):
     id = AutoField()
-    uploader = ForeignKeyField(model=User, backref="id", null=False)
+    uploader = ForeignKeyField(model=User, null=False)
     upload_date = DateTimeField(null=False)
     filename = CharField(null=False, unique=True)
