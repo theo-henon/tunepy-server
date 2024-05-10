@@ -23,6 +23,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = Config.API_SECRET_KEY
 app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
 app.config['JWT_TOKEN_LOCATION'] = ['headers']
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 jwt = JWTManager(app)
 
 
