@@ -107,15 +107,24 @@ def songs():
         except Exception as ex:
             return {"msg": f"An internal server error occurred: {str(ex)}"}
     else:
-        songs = []
-        for song in Song.select():
-            songs.append({
+        limit = -1
+        try:
+            limit = int(request.args["limit"])
+        except KeyError:
+            pass
+        except ValueError:
+            return {"msg": "Invalid parameter's value for 'limit' field."}, 400
+
+        songs_info = []
+        query = Song.select()
+        for song in query.limit(limit) if limit > 0 else query:
+            songs_info.append({
                 "id": song.id,
                 "uploader_id": song.uploader.id,
                 "upload_date": song.upload_date,
                 "filename": song.filename
             })
-        return {"songs": songs}
+        return {"songs": songs_info}
 
 
 @app.route("/songs/<int:id>", methods=["GET"])
