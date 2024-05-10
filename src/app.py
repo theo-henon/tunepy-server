@@ -1,7 +1,7 @@
 import os
 
 import bcrypt
-from flask import Flask, request
+from flask import Flask, request, send_file
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from peewee import DoesNotExist, IntegrityError
 from werkzeug.utils import secure_filename
@@ -141,6 +141,20 @@ def song_info(id):
         }
     except DoesNotExist:
         return {"msg": "This songs does not exist!"}, 404
+    except Exception as ex:
+        return {"msg": f"An internal server error occurred: {str(ex)}"}
+
+
+@app.route("/songs/stream/<int:id>", methods=["GET"])
+@jwt_required()
+def stream_song(id):
+    try:
+        song = Song.get_by_id(id)
+        song_path = os.path.abspath(os.path.join(Config.SONGS_DIRECTORY, song.filename))
+        app.logger.debug(song_path)
+        return send_file(song_path, as_attachment=False)
+    except DoesNotExist:
+        return {"msg": "This song does not exist!"}, 404
     except Exception as ex:
         return {"msg": f"An internal server error occurred: {str(ex)}"}
 

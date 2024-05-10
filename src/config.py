@@ -1,5 +1,4 @@
 import os
-
 import yaml
 
 
@@ -10,7 +9,7 @@ class Config:
     API_SECRET_KEY: str = "your_strong_secret_key"
     JWT_SECRET_KEY: str = "your_jwt_secret_key"
     DB_FILENAME: str = "tunepy_database.db"
-    SONGS_DIRECTORY: str = "./songs/"
+    SONGS_DIRECTORY: str = os.path.join(".", "songs")
 
     @staticmethod
     def parse():
