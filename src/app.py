@@ -151,7 +151,6 @@ def stream_song(id):
     try:
         song = Song.get_by_id(id)
         song_path = os.path.abspath(os.path.join(Config.SONGS_DIRECTORY, song.filename))
-        app.logger.debug(song_path)
         return send_file(song_path, as_attachment=False)
     except DoesNotExist:
         return {"msg": "This song does not exist!"}, 404
