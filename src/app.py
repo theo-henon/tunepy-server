@@ -89,7 +89,7 @@ def user_profile(username):
 
 @app.route("/songs", methods=["GET", "POST"])
 @jwt_required()
-def post_song():
+def songs():
     if request.method == "POST":
         song_file = request.files["audio"]
         song_filename = secure_filename(song_file.filename)
@@ -116,6 +116,23 @@ def post_song():
                 "filename": song.filename
             })
         return {"songs": songs}
+
+
+@app.route("/songs/<int:id>", methods=["GET"])
+@jwt_required()
+def song_info(id):
+    try:
+        song = Song.get_by_id(id)
+        return {
+            "id": song.id,
+            "uploader_id": song.uploader.id,
+            "upload_date": song.upload_date,
+            "filename": song.filename
+        }
+    except DoesNotExist:
+        return {"msg": "This songs does not exist!"}, 404
+    except Exception as ex:
+        return {"msg": f"An internal server error occurred: {str(ex)}"}
 
 
 if __name__ == "__main__":
