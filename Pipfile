@@ -13,6 +13,7 @@ pytest = "*"
 librosa = "*"
 mutagen = "*"
 pydub = "*"
+flask-cors = "*"
 
 [dev-packages]
 
