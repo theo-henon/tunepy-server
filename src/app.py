@@ -2,6 +2,7 @@ import os
 
 import bcrypt
 from flask import Flask, request, send_file
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from peewee import DoesNotExist, IntegrityError
 from werkzeug.utils import secure_filename
@@ -25,6 +26,7 @@ app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
 app.config['JWT_TOKEN_LOCATION'] = ['headers']
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 jwt = JWTManager(app)
+CORS(app)
 
 
 @app.route("/users/register", methods=["POST"])
